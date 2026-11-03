@@ -8,6 +8,13 @@
       "when": 1793197213738,
       "tag": "0000_auth_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1793663921014,
+      "tag": "20261102235841_oauth_provider",
+      "breakpoints": true
     }
   ]
 }

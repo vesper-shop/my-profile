@@ -3,9 +3,7 @@ import { Loader2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { type SVGProps, useState } from "react";
 import { toast } from "sonner";
-import BlurFade from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,8 +14,6 @@ export const Route = createFileRoute("/_auth/login")({
   component: LoginPage,
 });
 
-const BLUR_FADE_DELAY = 0.04;
-
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,123 +22,120 @@ function LoginPage() {
   const navigate = useNavigate();
 
   return (
-    <BlurFade delay={BLUR_FADE_DELAY}>
-      <Card className="max-w-md w-full h-fit mx-auto my-auto">
-        <CardHeader>
-          <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
-          <CardDescription className="text-xs md:text-sm">
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link to="/password/forget" className="ml-auto inline-block text-sm underline">
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="password"
-                autoComplete="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="remember"
-                checked={rememberMe}
-                onCheckedChange={(v) => setRememberMe(v === true)}
-              />
-              <Label htmlFor="remember">Remember me</Label>
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-              onClick={async () => {
-                await authClient.signIn.email(
-                  { email, password },
-                  {
-                    onRequest: () => setLoading(true),
-                    onResponse: () => setLoading(false),
-                    onError: (ctx) => {
-                      toast.error(ctx.error.message);
-                    },
-                    onSuccess: () => navigate({ to: "/chat" }),
-                  },
-                );
-              }}
-            >
-              {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
-            </Button>
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">或者</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                disabled={loading}
-                onClick={async () => {
-                  setLoading(true);
-                  try {
-                    await signinGithub();
-                  } finally {
-                    setLoading(false);
-                  }
-                }}
-              >
-                <GithubIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">GitHub</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                disabled={loading}
-                onClick={async () => {
-                  setLoading(true);
-                  try {
-                    await signinGoogle();
-                  } finally {
-                    setLoading(false);
-                  }
-                }}
-              >
-                <ChromeIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">Google</span>
-              </Button>
-            </div>
-            <div className="text-center text-sm">
-              No Account?{" "}
-              <Link to="/signup" className="underline">
-                Sign UP
-              </Link>
-            </div>
+    <section className="grid gap-8">
+      <header className="grid gap-1.5">
+        <h1 className="text-xl font-semibold tracking-tight">Sign In</h1>
+        <p className="text-sm text-muted-foreground">
+          Enter your email below to login to your account
+        </p>
+      </header>
+
+      <div className="grid gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="grid gap-2">
+          <div className="flex items-center">
+            <Label htmlFor="password">Password</Label>
+            <Link to="/password/forget" className="ml-auto inline-block text-sm underline">
+              Forgot your password?
+            </Link>
           </div>
-        </CardContent>
-      </Card>
-    </BlurFade>
+          <Input
+            id="password"
+            type="password"
+            placeholder="password"
+            autoComplete="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="remember"
+            checked={rememberMe}
+            onCheckedChange={(v) => setRememberMe(v === true)}
+          />
+          <Label htmlFor="remember">Remember me</Label>
+        </div>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={loading}
+          onClick={async () => {
+            await authClient.signIn.email(
+              { email, password },
+              {
+                onRequest: () => setLoading(true),
+                onResponse: () => setLoading(false),
+                onError: (ctx) => {
+                  toast.error(ctx.error.message);
+                },
+                onSuccess: () => navigate({ to: "/chat" }),
+              },
+            );
+          }}
+        >
+          {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
+        </Button>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">或者</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <Button
+            variant="outline"
+            className="w-full gap-2"
+            disabled={loading}
+            onClick={async () => {
+              setLoading(true);
+              try {
+                await signinGithub();
+              } finally {
+                setLoading(false);
+              }
+            }}
+          >
+            <GithubIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">GitHub</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full gap-2"
+            disabled={loading}
+            onClick={async () => {
+              setLoading(true);
+              try {
+                await signinGoogle();
+              } finally {
+                setLoading(false);
+              }
+            }}
+          >
+            <ChromeIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">Google</span>
+          </Button>
+        </div>
+        <div className="text-center text-sm">
+          No Account?{" "}
+          <Link to="/signup" className="underline">
+            Sign UP
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
 

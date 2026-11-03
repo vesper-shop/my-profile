@@ -16,5 +16,9 @@ function AuthLayout() {
     }
   }, [session, isPending, navigate]);
 
-  return <Outlet />;
+  return (
+    <main className="mx-auto flex min-h-svh w-full max-w-sm flex-col justify-center px-6 py-12">
+      <Outlet />
+    </main>
+  );
 }

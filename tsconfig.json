@@ -1,5 +1,4 @@
 {
-  "extends": "./.void/tsconfig.json",
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -18,9 +17,11 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./types/*"],
-      "@server/*": ["./server/*"]
+      "@server/*": ["./server/*"],
+      "void/db": ["./.void/db.d.ts"],
+      "void/routes": ["./.void/routes.d.ts"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".void/*.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

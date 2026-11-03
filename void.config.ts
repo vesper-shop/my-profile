@@ -2,6 +2,7 @@ import { defineConfig } from "void/config";
 
 export default defineConfig({
   target: "cloudflare",
+  auth: { providers: ["email", "github", "google"] },
   routing: {
     notFound: "404-page",
   },

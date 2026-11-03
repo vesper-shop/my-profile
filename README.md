@@ -59,15 +59,15 @@ Configuration defaults in `env.ts` (override locally in `.env`):
 
 Local `.env` / production secret bindings:
 
-| Variable               | Purpose                      |
-| ---------------------- | ---------------------------- |
-| `BETTER_AUTH_SECRET`   | Auth secret key              |
-| `GITHUB_CLIENT_ID`     | GitHub OAuth client ID       |
-| `GITHUB_CLIENT_SECRET` | GitHub OAuth client secret   |
-| `GOOGLE_CLIENT_ID`     | Google OAuth client ID       |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret   |
-| `RESEND_API_KEY`       | Transactional email (Resend) |
-| `OPENAI_API_KEY`       | AI chat                      |
+| Variable                    | Purpose                      |
+| --------------------------- | ---------------------------- |
+| `BETTER_AUTH_SECRET`        | Auth secret key              |
+| `AUTH_GITHUB_CLIENT_ID`     | GitHub OAuth client ID       |
+| `AUTH_GITHUB_CLIENT_SECRET` | GitHub OAuth client secret   |
+| `AUTH_GOOGLE_CLIENT_ID`     | Google OAuth client ID       |
+| `AUTH_GOOGLE_CLIENT_SECRET` | Google OAuth client secret   |
+| `RESEND_API_KEY`            | Transactional email (Resend) |
+| `OPENAI_API_KEY`            | AI chat                      |
 
 ## Commands
 
