@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1793197213738,
-      "tag": "0000_auth_tables",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1793663921014,
-      "tag": "20261102235841_oauth_provider",
+      "when": 1793706500430,
+      "tag": "20261103114820_init",
       "breakpoints": true
     }
   ]

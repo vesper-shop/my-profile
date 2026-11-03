@@ -34,7 +34,7 @@ pnpm format    # Vite+ formatting
 - **TypeScript 7**
 - **Tailwind CSS 4** — CSS-first configuration
 - **Hono** — Worker request handlers
-- **Better Auth 1.6** — email/password and OAuth authentication
+- **Better Auth 1.7** — GitHub/Google sign-in and the you-find.me OAuth provider
 - **Cloudflare D1**
 - **Pi Agent 1.4** — stateless authenticated chat runtime with typed NDJSON events
 
@@ -44,7 +44,7 @@ pnpm format    # Vite+ formatting
 
 ```text
 .
-├── auth.ts                 # Void/Better Auth configuration and Resend email callbacks
+├── auth.ts                 # Void/Better Auth configuration and OAuth provider
 ├── env.ts                  # Validated public and secret environment variables
 ├── routes/                 # Void file-based server routes
 │   └── api/                # JSON, image, auth, and streaming API handlers
@@ -101,18 +101,28 @@ Worker in production.
 - `chat.tsx` — authenticated streaming chat
 - `story.tsx` — story and Mapbox travel map
 - `cv.tsx` — CV
-- `_auth/` and `password/` — authentication flows
+- `_auth/` — sign-in, OAuth consent, and authentication errors
 
 The frontend authentication client is exported from `src/lib/auth-client.ts` using `void/client/react`.
 
 ## Authentication
 
-`auth.ts` extends Void's Better Auth defaults:
+`auth.ts` extends Void's Better Auth defaults.
 
-- email/password login and registration
-- mandatory email verification
-- password reset through Resend
-- GitHub and Google OAuth when all provider credentials are present
+- GitHub and Google sign-in; there is no email/password login or transactional email
+- visitors may sign up and use the profile chat and the Moment guestbook
+- the owner is the user seeded in the initial migration (`OWNER_USER_ID` in `types/oauth.ts`),
+  bound to their GitHub and Google account ids; implicit account linking by email is disabled
+- `@better-auth/oauth-provider` + `jwt` issue tokens for Memos, Moment and Knowledge
+  (issuer `https://you-find.me/api/auth`); their scopes are issued to the owner only, and the
+  token `sub` is the owner's user id
+- MCP clients register themselves through dynamic client registration (loopback callbacks are
+  treated as native) and discover the server through `/.well-known/oauth-authorization-server/api/auth`,
+  which `void.config.ts` rewrites to Better Auth's metadata route
+- native public clients (`vesper`, `workspace`) require approval on `/oauth/consent`;
+  first-party web clients (`memos`, `moment`, `knowledge`) are public PKCE clients without a
+  secret and skip consent
+- authorization and sign-in errors land on `/error`
 - encrypted OAuth tokens
 - seven-day sessions, refreshed daily
 - five-minute cookie cache

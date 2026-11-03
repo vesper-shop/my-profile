@@ -38,7 +38,7 @@ This project splits runtime values by source.
 - `.env` contains local secrets. It is ignored by Git.
 - Cloudflare resource bindings live under `cloudflare` in `void.config.ts`; `void.lock.json` records
   the resolved resources.
-- Non-sensitive configuration (`OPENAI_API_URL`, `OPENAI_MODEL`, `RESEND_FROM`) is a default in
+- Non-sensitive configuration (`OPENAI_API_URL`, `OPENAI_MODEL`) is a default in
   `env.ts`. Credentials are uploaded to Cloudflare with `void secret put <NAME>`.
 - Production builds do not load `.env`; runtime secrets stay in Cloudflare encrypted bindings.
 
@@ -55,19 +55,17 @@ Configuration defaults in `env.ts` (override locally in `.env`):
 | ---------------- | -------------------------- |
 | `OPENAI_API_URL` | OpenAI-compatible base URL |
 | `OPENAI_MODEL`   | Default chat model         |
-| `RESEND_FROM`    | Sender address             |
 
 Local `.env` / production secret bindings:
 
-| Variable                    | Purpose                      |
-| --------------------------- | ---------------------------- |
-| `BETTER_AUTH_SECRET`        | Auth secret key              |
-| `AUTH_GITHUB_CLIENT_ID`     | GitHub OAuth client ID       |
-| `AUTH_GITHUB_CLIENT_SECRET` | GitHub OAuth client secret   |
-| `AUTH_GOOGLE_CLIENT_ID`     | Google OAuth client ID       |
-| `AUTH_GOOGLE_CLIENT_SECRET` | Google OAuth client secret   |
-| `RESEND_API_KEY`            | Transactional email (Resend) |
-| `OPENAI_API_KEY`            | AI chat                      |
+| Variable                    | Purpose                    |
+| --------------------------- | -------------------------- |
+| `BETTER_AUTH_SECRET`        | Auth secret key            |
+| `AUTH_GITHUB_CLIENT_ID`     | GitHub OAuth client ID     |
+| `AUTH_GITHUB_CLIENT_SECRET` | GitHub OAuth client secret |
+| `AUTH_GOOGLE_CLIENT_ID`     | Google OAuth client ID     |
+| `AUTH_GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
+| `OPENAI_API_KEY`            | AI chat                    |
 
 ## Commands
 

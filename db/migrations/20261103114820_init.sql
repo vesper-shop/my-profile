@@ -1,3 +1,21 @@
+CREATE TABLE `account` (
+	`id` text PRIMARY KEY NOT NULL,
+	`accountId` text NOT NULL,
+	`providerId` text NOT NULL,
+	`userId` text NOT NULL,
+	`accessToken` text,
+	`refreshToken` text,
+	`idToken` text,
+	`accessTokenExpiresAt` integer,
+	`refreshTokenExpiresAt` integer,
+	`scope` text,
+	`password` text,
+	`createdAt` integer NOT NULL,
+	`updatedAt` integer NOT NULL,
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE INDEX `account_userId_idx` ON `account` (`userId`);--> statement-breakpoint
 CREATE TABLE `jwks` (
 	`id` text PRIMARY KEY NOT NULL,
 	`publicKey` text NOT NULL,
@@ -158,12 +176,54 @@ CREATE TABLE `oauthResource` (
 	`metadata` text
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `oauthResource_identifier_unique` ON `oauthResource` (`identifier`);
+CREATE UNIQUE INDEX `oauthResource_identifier_unique` ON `oauthResource` (`identifier`);--> statement-breakpoint
+CREATE TABLE `session` (
+	`id` text PRIMARY KEY NOT NULL,
+	`expiresAt` integer NOT NULL,
+	`token` text NOT NULL,
+	`createdAt` integer NOT NULL,
+	`updatedAt` integer NOT NULL,
+	`ipAddress` text,
+	`userAgent` text,
+	`userId` text NOT NULL,
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);
 --> statement-breakpoint
+CREATE UNIQUE INDEX `session_token_unique` ON `session` (`token`);--> statement-breakpoint
+CREATE INDEX `session_userId_idx` ON `session` (`userId`);--> statement-breakpoint
+CREATE TABLE `user` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`email` text NOT NULL,
+	`emailVerified` integer NOT NULL,
+	`image` text,
+	`createdAt` integer NOT NULL,
+	`updatedAt` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint
+CREATE TABLE `verification` (
+	`id` text PRIMARY KEY NOT NULL,
+	`identifier` text NOT NULL,
+	`value` text NOT NULL,
+	`expiresAt` integer NOT NULL,
+	`createdAt` integer NOT NULL,
+	`updatedAt` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE INDEX `verification_identifier_idx` ON `verification` (`identifier`);--> statement-breakpoint
 INSERT INTO `oauthClient` (`id`, `clientId`, `clientSecret`, `disabled`, `skipConsent`, `enableEndSession`, `scopes`, `createdAt`, `updatedAt`, `name`, `redirectUris`, `tokenEndpointAuthMethod`, `applicationType`, `grantTypes`, `responseTypes`, `requirePKCE`)
 VALUES
-('vesper', 'vesper', NULL, 0, 1, 0, '["openid","profile","email","offline_access","memos:read","memos:write","moment:read","moment:write","knowledge:read","knowledge:write"]', 1793664001839, 1793664001839, 'Vesper', '["vesper://oauth/callback"]', 'none', 'native', '["authorization_code","refresh_token"]', '["code"]', 1),
-('workspace', 'workspace', NULL, 0, 1, 0, '["openid","profile","email","offline_access","memos:read","memos:write","moment:read","moment:write","knowledge:read","knowledge:write"]', 1793664058675, 1793664058675, 'Vesper Desktop', '["http://127.0.0.1:8793/callback"]', 'none', 'native', '["authorization_code","refresh_token"]', '["code"]', 1),
-('memos', 'memos', 'rdmlBem5CZn4fGiJd5L5kO04XHIKMBrlWd93WUVjKbw', 0, 1, 0, '["openid","profile","email"]', 1793665692898, 1793665692898, 'Memos', '["https://memos.you-find.me/api/auth/callback/you-find-me", "http://localhost:5173/api/auth/callback/you-find-me"]', 'client_secret_basic', 'web', '["authorization_code"]', '["code"]', 1),
-('moment', 'moment', 'oDEwV3TTIIev9zCI61fm1MDpgCOtZoGtay7nr5YmCtg', 0, 1, 0, '["openid","profile","email"]', 1793665692898, 1793665692898, 'Moment', '["https://moment.you-find.me/api/auth/callback/you-find-me", "http://localhost:5173/api/auth/callback/you-find-me"]', 'client_secret_basic', 'web', '["authorization_code"]', '["code"]', 1),
-('knowledge', 'knowledge', 'JJBnjVgKzu2bE-r9ceoLdU3t4bXZiAK91q0F0ImXyuc', 0, 1, 0, '["openid","profile","email"]', 1793665692898, 1793665692898, 'Knowledge', '["https://knowledge.you-find.me/api/auth/callback/you-find-me", "http://localhost:8787/api/auth/callback/you-find-me", "http://localhost:3000/api/auth/callback/you-find-me"]', 'client_secret_basic', 'web', '["authorization_code"]', '["code"]', 1);
+('vesper', 'vesper', NULL, 0, 0, 0, '["openid","profile","email","offline_access","memos:read","memos:write","moment:read","moment:write","knowledge:read","knowledge:write"]', 1793664001839, 1793664001839, 'Vesper', '["vesper://oauth/callback"]', 'none', 'native', '["authorization_code","refresh_token"]', '["code"]', 1),
+('workspace', 'workspace', NULL, 0, 0, 0, '["openid","profile","email","offline_access","memos:read","memos:write","moment:read","moment:write","knowledge:read","knowledge:write"]', 1793664058675, 1793664058675, 'Vesper Desktop', '["http://127.0.0.1:8793/callback"]', 'none', 'native', '["authorization_code","refresh_token"]', '["code"]', 1),
+('memos', 'memos', NULL, 0, 1, 0, '["openid","profile","email"]', 1793665692898, 1793665692898, 'Memos', '["https://memos.you-find.me/api/auth/callback/you-find-me", "http://localhost:5173/api/auth/callback/you-find-me"]', 'none', 'web', '["authorization_code"]', '["code"]', 1),
+('moment', 'moment', NULL, 0, 1, 0, '["openid","profile","email"]', 1793665692898, 1793665692898, 'Moment', '["https://moment.you-find.me/api/auth/callback/you-find-me", "http://localhost:5173/api/auth/callback/you-find-me"]', 'none', 'web', '["authorization_code"]', '["code"]', 1),
+('knowledge', 'knowledge', NULL, 0, 1, 0, '["openid","profile","email"]', 1793665692898, 1793665692898, 'Knowledge', '["https://knowledge.you-find.me/api/auth/callback/you-find-me", "http://localhost:8787/api/auth/callback/you-find-me", "http://localhost:3000/api/auth/callback/you-find-me"]', 'none', 'web', '["authorization_code"]', '["code"]', 1);
+--> statement-breakpoint
+INSERT INTO `user` (`id`, `name`, `email`, `emailVerified`, `image`, `createdAt`, `updatedAt`)
+VALUES ('owner', 'Yiming Wang', 'pleasure9876@qq.com', 1, 'https://avatars.githubusercontent.com/u/144885467', 1793706500430, 1793706500430);
+--> statement-breakpoint
+INSERT INTO `account` (`id`, `accountId`, `providerId`, `userId`, `createdAt`, `updatedAt`)
+VALUES
+('owner-github', '144885467', 'github', 'owner', 1793706500430, 1793706500430),
+('owner-google', '106887666860847474211', 'google', 'owner', 1793706500430, 1793706500430);

@@ -39,6 +39,9 @@ pnpm build    # production build
 pnpm deploy   # build and deploy with `void deploy --platform cloudflare`
 ```
 
+Workers Builds deploys every push to `refactor` with the same `void deploy` command. Do not run
+`pnpm deploy` for a pushed commit: two concurrent deploys supersede each other and the build fails.
+
 ## Database Migrations
 
 Better Auth tables are versioned in `db/migrations/` and stored in the `my-profile` D1 database.

@@ -2,9 +2,14 @@ import { defineConfig } from "void/config";
 
 export default defineConfig({
   target: "cloudflare",
-  auth: { providers: ["email", "github", "google"] },
+  auth: { providers: ["github", "google"] },
   routing: {
     notFound: "404-page",
+    rewrites: {
+      "/.well-known/oauth-authorization-server/api/auth":
+        "/api/auth/.well-known/oauth-authorization-server",
+      "/.well-known/openid-configuration/api/auth": "/api/auth/.well-known/openid-configuration",
+    },
   },
   inference: {
     appType: "void",

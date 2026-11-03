@@ -13,13 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as CvRouteImport } from './routes/cv'
-import { Route as PasswordRouteRouteImport } from './routes/password/route'
 import { Route as SocialRouteImport } from './routes/social'
 import { Route as StoryRouteImport } from './routes/story'
+import { Route as AuthErrorRouteImport } from './routes/_auth/error'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
-import { Route as PasswordForgetRouteImport } from './routes/password/forget'
-import { Route as PasswordResetRouteImport } from './routes/password/reset'
+import { Route as AuthOauthConsentRouteImport } from './routes/_auth/oauth/consent'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,11 +38,6 @@ const CvRoute = CvRouteImport.update({
   path: '/cv',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PasswordRouteRoute = PasswordRouteRouteImport.update({
-  id: '/password',
-  path: '/password',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SocialRoute = SocialRouteImport.update({
   id: '/social',
   path: '/social',
@@ -55,109 +48,91 @@ const StoryRoute = StoryRouteImport.update({
   path: '/story',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthErrorRoute = AuthErrorRouteImport.update({
+  id: '/error',
+  path: '/error',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AuthSignupRoute = AuthSignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+const AuthOauthConsentRoute = AuthOauthConsentRouteImport.update({
+  id: '/oauth/consent',
+  path: '/oauth/consent',
   getParentRoute: () => AuthRouteRoute,
-} as any)
-const PasswordForgetRoute = PasswordForgetRouteImport.update({
-  id: '/forget',
-  path: '/forget',
-  getParentRoute: () => PasswordRouteRoute,
-} as any)
-const PasswordResetRoute = PasswordResetRouteImport.update({
-  id: '/reset',
-  path: '/reset',
-  getParentRoute: () => PasswordRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/password': typeof PasswordRouteRouteWithChildren
   '/chat': typeof ChatRoute
   '/cv': typeof CvRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
+  '/error': typeof AuthErrorRoute
   '/login': typeof AuthLoginRoute
-  '/signup': typeof AuthSignupRoute
-  '/password/forget': typeof PasswordForgetRoute
-  '/password/reset': typeof PasswordResetRoute
+  '/oauth/consent': typeof AuthOauthConsentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/password': typeof PasswordRouteRouteWithChildren
   '/chat': typeof ChatRoute
   '/cv': typeof CvRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
+  '/error': typeof AuthErrorRoute
   '/login': typeof AuthLoginRoute
-  '/signup': typeof AuthSignupRoute
-  '/password/forget': typeof PasswordForgetRoute
-  '/password/reset': typeof PasswordResetRoute
+  '/oauth/consent': typeof AuthOauthConsentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/password': typeof PasswordRouteRouteWithChildren
   '/chat': typeof ChatRoute
   '/cv': typeof CvRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
+  '/_auth/error': typeof AuthErrorRoute
   '/_auth/login': typeof AuthLoginRoute
-  '/_auth/signup': typeof AuthSignupRoute
-  '/password/forget': typeof PasswordForgetRoute
-  '/password/reset': typeof PasswordResetRoute
+  '/_auth/oauth/consent': typeof AuthOauthConsentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/password'
     | '/chat'
     | '/cv'
     | '/social'
     | '/story'
+    | '/error'
     | '/login'
-    | '/signup'
-    | '/password/forget'
-    | '/password/reset'
+    | '/oauth/consent'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/password'
     | '/chat'
     | '/cv'
     | '/social'
     | '/story'
+    | '/error'
     | '/login'
-    | '/signup'
-    | '/password/forget'
-    | '/password/reset'
+    | '/oauth/consent'
   id:
     | '__root__'
     | '/'
     | '/_auth'
-    | '/password'
     | '/chat'
     | '/cv'
     | '/social'
     | '/story'
+    | '/_auth/error'
     | '/_auth/login'
-    | '/_auth/signup'
-    | '/password/forget'
-    | '/password/reset'
+    | '/_auth/oauth/consent'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  PasswordRouteRoute: typeof PasswordRouteRouteWithChildren
   ChatRoute: typeof ChatRoute
   CvRoute: typeof CvRoute
   SocialRoute: typeof SocialRoute
@@ -194,13 +169,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CvRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/password': {
-      id: '/password'
-      path: '/password'
-      fullPath: '/password'
-      preLoaderRoute: typeof PasswordRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/social': {
       id: '/social'
       path: '/social'
@@ -215,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/error': {
+      id: '/_auth/error'
+      path: '/error'
+      fullPath: '/error'
+      preLoaderRoute: typeof AuthErrorRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/login': {
       id: '/_auth/login'
       path: '/login'
@@ -222,62 +197,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_auth/signup': {
-      id: '/_auth/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof AuthSignupRouteImport
+    '/_auth/oauth/consent': {
+      id: '/_auth/oauth/consent'
+      path: '/oauth/consent'
+      fullPath: '/oauth/consent'
+      preLoaderRoute: typeof AuthOauthConsentRouteImport
       parentRoute: typeof AuthRouteRoute
-    }
-    '/password/forget': {
-      id: '/password/forget'
-      path: '/forget'
-      fullPath: '/password/forget'
-      preLoaderRoute: typeof PasswordForgetRouteImport
-      parentRoute: typeof PasswordRouteRoute
-    }
-    '/password/reset': {
-      id: '/password/reset'
-      path: '/reset'
-      fullPath: '/password/reset'
-      preLoaderRoute: typeof PasswordResetRouteImport
-      parentRoute: typeof PasswordRouteRoute
     }
   }
 }
 
 interface AuthRouteRouteChildren {
+  AuthErrorRoute: typeof AuthErrorRoute
   AuthLoginRoute: typeof AuthLoginRoute
-  AuthSignupRoute: typeof AuthSignupRoute
+  AuthOauthConsentRoute: typeof AuthOauthConsentRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthErrorRoute: AuthErrorRoute,
   AuthLoginRoute: AuthLoginRoute,
-  AuthSignupRoute: AuthSignupRoute,
+  AuthOauthConsentRoute: AuthOauthConsentRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
-interface PasswordRouteRouteChildren {
-  PasswordForgetRoute: typeof PasswordForgetRoute
-  PasswordResetRoute: typeof PasswordResetRoute
-}
-
-const PasswordRouteRouteChildren: PasswordRouteRouteChildren = {
-  PasswordForgetRoute: PasswordForgetRoute,
-  PasswordResetRoute: PasswordResetRoute,
-}
-
-const PasswordRouteRouteWithChildren = PasswordRouteRoute._addFileChildren(
-  PasswordRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  PasswordRouteRoute: PasswordRouteRouteWithChildren,
   ChatRoute: ChatRoute,
   CvRoute: CvRoute,
   SocialRoute: SocialRoute,

@@ -6,13 +6,7 @@ import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { voidPlugin } from "void";
 
 const SITE = "https://you-find.me";
-const PRIVATE_ROUTES = new Set([
-  "/login",
-  "/signup",
-  "/password",
-  "/password/forget",
-  "/password/reset",
-]);
+const PRIVATE_ROUTES = new Set(["/login", "/error", "/oauth/consent"]);
 const ROUTE_TITLES: Record<string, string> = {
   "/chat": "Chat",
   "/cv": "CV",
