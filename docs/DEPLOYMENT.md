@@ -14,6 +14,16 @@ The `cloudflare` section of `void.config.ts` is the source of truth for resource
 for application environment validation: non-sensitive configuration has a default there, and
 credentials are stored as remote secrets.
 
+## Domains
+
+`void.config.ts` binds `you-find.me`, `www.you-find.me`, `yiming1234.cn`, and `www.yiming1234.cn`
+to the Worker as custom domains. Cloudflare Single Redirects, configured on each zone rather than in
+this repository, run before the Worker:
+
+- `www.you-find.me` and `www.yiming1234.cn` redirect (301) to their apex domains.
+- On `yiming1234.cn`, `/login`, `/error`, `/oauth/*`, `/api/auth/*`, and the OAuth discovery
+  documents redirect (308) to `you-find.me`, so `https://you-find.me/api/auth` stays the only issuer.
+
 ## Secrets
 
 Better Auth and the GitHub/Google OAuth credentials are listed in `env.ts`. Local values belong in the

@@ -23,10 +23,10 @@ export default defineConfig({
     workers_dev: false,
     preview_urls: false,
     routes: [
-      {
-        pattern: "you-find.me",
-        custom_domain: true,
-      },
+      { pattern: "you-find.me", custom_domain: true },
+      { pattern: "www.you-find.me", custom_domain: true },
+      { pattern: "yiming1234.cn", custom_domain: true },
+      { pattern: "www.yiming1234.cn", custom_domain: true },
     ],
     placement: {
       mode: "smart",
