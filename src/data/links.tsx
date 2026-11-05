@@ -1,4 +1,4 @@
-export interface FriendLink {
+interface FriendLink {
   name: string;
   url: string;
   avatar: string;

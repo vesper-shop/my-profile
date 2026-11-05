@@ -1,5 +1,3 @@
-"use client";
-
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

@@ -1,55 +1,36 @@
-"use client";
+import { useEffect, useState } from "react";
 
-import { useEffect, useRef, useState } from "react";
-
-const POLL_INTERVAL_MS = 5 * 60_000;
 const HEARTBEAT_INTERVAL_MS = 60_000;
 const SESSION_STORAGE_KEY = "presence-session-id";
 
-function getSessionId(): string {
-  if (typeof sessionStorage === "undefined") return crypto.randomUUID();
-  let id = sessionStorage.getItem(SESSION_STORAGE_KEY);
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem(SESSION_STORAGE_KEY, id);
-  }
-  return id;
-}
-
 export function PresenceCount() {
-  const [count, setCount] = useState(1);
-  const sessionId = useRef<string>("");
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
-    sessionId.current = getSessionId();
+    let sessionId = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      sessionStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+    }
+    const body = JSON.stringify({ sessionId });
 
-    const heartbeat = () => {
-      fetch("/api/presence", {
+    const heartbeat = async () => {
+      const response = await fetch("/api/presence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: sessionId.current }),
-        keepalive: true,
-      }).catch(() => {});
+        body,
+      });
+      if (!response.ok) return;
+      const presence = (await response.json()) as { count: number };
+      setCount(presence.count);
     };
 
-    const fetchCount = () => {
-      fetch("/api/presence")
-        .then((res) => res.json() as Promise<{ count: number }>)
-        .then(({ count: n }) => setCount(n))
-        .catch(() => {});
-    };
-
-    heartbeat();
-    fetchCount();
-
-    const heartbeatTimer = setInterval(heartbeat, HEARTBEAT_INTERVAL_MS);
-    const pollTimer = setInterval(fetchCount, POLL_INTERVAL_MS);
-
-    return () => {
-      clearInterval(heartbeatTimer);
-      clearInterval(pollTimer);
-    };
+    void heartbeat();
+    const timer = setInterval(() => void heartbeat(), HEARTBEAT_INTERVAL_MS);
+    return () => clearInterval(timer);
   }, []);
+
+  if (count === null) return null;
 
   return (
     <p className="text-xs text-muted-foreground/50">

@@ -1,22 +1,11 @@
-const sessions = new Map<string, number>();
 const SESSION_TTL_MS = 180_000;
+const sessions = new Map<string, number>();
 
-export function touchPresence(sessionId: string): void {
-  sessions.set(sessionId, Date.now());
-}
-
-export function getActivePresenceCount(): number {
+export function recordPresence(sessionId: string): number {
   const now = Date.now();
-  let count = 0;
-  for (const lastSeen of sessions.values()) {
-    if (now - lastSeen < SESSION_TTL_MS) count++;
-  }
-  return Math.max(1, count);
-}
-
-export function pruneExpiredPresence(): void {
-  const now = Date.now();
+  sessions.set(sessionId, now);
   for (const [id, lastSeen] of sessions) {
     if (now - lastSeen >= SESSION_TTL_MS) sessions.delete(id);
   }
+  return sessions.size;
 }

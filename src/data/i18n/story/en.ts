@@ -1,9 +1,6 @@
-/**
- * Story page — English content
- */
-export const STORY_MARKDOWN = String.raw`## 👋 Hey! I'm Pleasure1234
-
-Thanks for visiting my homepage!
+export const STORY = {
+  title: "👋 Hey! I'm Pleasure1234",
+  intro: String.raw`Thanks for visiting my homepage!
 
 What follows is a little biography of my younger years —
 
@@ -52,7 +49,8 @@ Since boarding at school from middle school onward, I'd never really stepped out
 
 so during university I've travelled to many corners of the world — I guess that makes me half a backpacker 🎒 now.
 
-### Personality & Hobbies
+`,
+  rest: String.raw`### Personality & Hobbies
 
 Half a homebody, I enjoy solitude.
 
@@ -153,4 +151,5 @@ A few more projects support development and play: [my-monorepo](https://github.c
 ### Closing Words
 
 Finally — thank you so much for reading all the way here, for listening to me ramble in this unremarkable little corner of the internet.
-`;
+`,
+};

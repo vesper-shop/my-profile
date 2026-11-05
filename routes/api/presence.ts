@@ -1,20 +1,19 @@
 import { z } from "zod";
 import { defineHandler } from "void/handler";
-import { getActivePresenceCount, pruneExpiredPresence, touchPresence } from "@server/lib/presence";
+import { recordPresence } from "@server/lib/presence";
 
 const presenceBodySchema = z.object({
-  sessionId: z.string().max(63).optional(),
-});
-
-export const GET = defineHandler((c) => {
-  pruneExpiredPresence();
-  return c.json({ count: getActivePresenceCount() });
+  sessionId: z.uuid(),
 });
 
 export const POST = defineHandler(async (c) => {
-  const rawBody = await c.req.json().catch(() => ({}));
+  let rawBody: unknown;
+  try {
+    rawBody = await c.req.json();
+  } catch {
+    return c.json({ error: "The request body is not valid JSON." }, 400);
+  }
   const body = presenceBodySchema.safeParse(rawBody);
-  if (body.success && body.data.sessionId) touchPresence(body.data.sessionId);
-  pruneExpiredPresence();
-  return c.json({ count: getActivePresenceCount() });
+  if (!body.success) return c.json({ error: "Invalid presence heartbeat." }, 400);
+  return c.json({ count: recordPresence(body.data.sessionId) });
 });

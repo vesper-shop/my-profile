@@ -1,8 +1,6 @@
-"use client";
-
 import { Terminal, type TerminalConfig } from "@my-profile/ui/terminal";
 import { FRIENDS } from "@/data/links";
-import { DATA } from "@/data/resume";
+import { PROFILE } from "@/data/profile";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { useIsMobile } from "@/lib/use-mobile";
 import { cn } from "@/lib/utils";
@@ -32,30 +30,25 @@ type InteractionType =
     };
 
 const config: TerminalConfig = {
-  hostname: "pleasure1234@website",
-  skills: DATA.skills.map((s) => s.name),
-  social: Object.values(DATA.contact.social)
+  user: "pleasure1234",
+  host: "website",
+  social: Object.values(PROFILE.contact.social)
     .filter((s) => s.url !== "#")
     .map((s) => ({ name: s.name, url: s.url })),
   contact: {
-    email: DATA.contact.email,
-    telegram: DATA.contact.telegram,
-    wechat: DATA.contact.wechat,
+    email: PROFILE.contact.email,
+    telegram: PROFILE.contact.telegram,
+    wechat: PROFILE.contact.wechat,
   },
-  projects: DATA.projects.map((p) => ({ title: p.title, dates: p.dates })),
   friends: FRIENDS.map((f) => ({ name: f.name, url: f.url })),
   routes: {
     social: "/social",
-    chat: "/chat",
     story: "/story",
-    cv: "/cv",
   },
   profile: {
     displayName: "Pleasure1234",
     username: "@Pleasurecruise",
-    location: DATA.location,
-    projectCount: DATA.projects.length,
-    hackathonCount: DATA.hackathons.length,
+    location: PROFILE.location,
     university: "University of Nottingham",
     degree: "BSc Computer Science with AI",
     graduationYear: "2027",

@@ -1,9 +1,6 @@
-/**
- * Story 页中文内容
- */
-export const STORY_MARKDOWN = String.raw`## 👋 嘿！我是Pleasure1234
-
-感谢你能光临我的主页！
+export const STORY = {
+  title: "👋 嘿！我是Pleasure1234",
+  intro: String.raw`感谢你能光临我的主页！
 
 下面的内容可以算是我对年少时光的一个传记
 
@@ -52,7 +49,8 @@ export const STORY_MARKDOWN = String.raw`## 👋 嘿！我是Pleasure1234
 
 于是在大学期间 游览了了世界的很多地方 也算是半个背包客🎒了吧
 
-### 性格与爱好
+`,
+  rest: String.raw`### 性格与爱好
 
 半个宅男 享受孤独
 
@@ -153,4 +151,5 @@ Claude Pro · Twitter Plus · QQ Music 绿钻
 ### 结语
 
 最后 非常感谢你能看到这里 在这个互联网上不起眼的角落里 听我倾诉
-`;
+`,
+};

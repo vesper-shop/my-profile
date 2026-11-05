@@ -1,11 +1,9 @@
-"use client";
-
 import mapboxgl, { type Map as MapboxMap } from "mapbox-gl";
 import { useTheme } from "next-themes";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
-export interface TravelLocation {
+interface TravelLocation {
   name: string;
   location: Readonly<[number, number]>;
   size?: number;

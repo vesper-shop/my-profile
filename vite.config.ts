@@ -8,8 +8,6 @@ import { voidPlugin } from "void";
 const SITE = "https://you-find.me";
 const PRIVATE_ROUTES = new Set(["/login", "/error", "/oauth/consent"]);
 const ROUTE_TITLES: Record<string, string> = {
-  "/chat": "Chat",
-  "/cv": "CV",
   "/social": "Social",
   "/story": "Story",
 };
@@ -85,7 +83,7 @@ export default defineConfig(({ command }) => ({
     },
   },
   lint: {
-    ignorePatterns: ["dist/**", "src/generated/**", "src/routeTree.gen.ts"],
+    ignorePatterns: ["dist/**", "src/routeTree.gen.ts"],
     options: {
       typeAware: true,
       typeCheck: true,
@@ -93,6 +91,6 @@ export default defineConfig(({ command }) => ({
   },
   fmt: {
     indent: "tab",
-    ignorePatterns: ["dist/**", "src/generated/**", "src/routeTree.gen.ts"],
+    ignorePatterns: ["dist/**", "src/routeTree.gen.ts"],
   },
 }));

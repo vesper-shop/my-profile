@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
-import { type SVGProps, useEffect, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { CircleCheck, Loader2 } from "lucide-react";
+import { type SVGProps, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { authClient, useSession } from "@/lib/auth-client";
@@ -10,20 +10,15 @@ export const Route = createFileRoute("/_auth/login")({
 });
 
 function LoginPage() {
-  const [pending, setPending] = useState<"idle" | "github" | "google">("idle");
+  const [pending, setPending] = useState<"idle" | "github" | "google" | "sign-out">("idle");
   const { data: session, isPending } = useSession();
-  const navigate = useNavigate();
   const resumesAuthorization = new URLSearchParams(window.location.search).has("sig");
-
-  useEffect(() => {
-    if (!isPending && session?.user && !resumesAuthorization) void navigate({ to: "/chat" });
-  }, [session, isPending, resumesAuthorization, navigate]);
 
   const signIn = async (provider: "github" | "google") => {
     setPending(provider);
     try {
       await authClient.signIn.social(
-        { provider, callbackURL: "/chat", errorCallbackURL: "/error" },
+        { provider, callbackURL: "/login", errorCallbackURL: "/error" },
         {
           onError: (ctx) => {
             toast.error(ctx.error.message);
@@ -34,6 +29,46 @@ function LoginPage() {
       setPending("idle");
     }
   };
+
+  const signOut = async () => {
+    setPending("sign-out");
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        },
+      });
+    } finally {
+      setPending("idle");
+    }
+  };
+
+  if (isPending) return <Loader2 className="size-5 animate-spin text-muted-foreground" />;
+
+  if (session && !resumesAuthorization) {
+    return (
+      <section className="grid w-full gap-6">
+        <div className="grid justify-items-center gap-2">
+          <CircleCheck className="size-6 text-foreground" aria-hidden="true" />
+          <h1 className="text-lg font-medium tracking-tight">Signed in</h1>
+          <p className="text-sm text-muted-foreground">
+            Signed in as {session.user.name}. You can close this page now.
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          className="w-full gap-2"
+          disabled={pending !== "idle"}
+          onClick={() => void signOut()}
+        >
+          {pending === "sign-out" && <Loader2 className="size-4 animate-spin" />}
+          Use another account
+        </Button>
+      </section>
+    );
+  }
 
   return (
     <section className="grid w-full gap-6">

@@ -1,6 +1,6 @@
 export type SelectorItem = { label: string; value: string; desc: string };
 
-export type StreamItem = { text: string; delay: number };
+type StreamItem = { text: string; delay: number };
 
 export type SlashCommandResult =
   | { kind: "text"; text: string }

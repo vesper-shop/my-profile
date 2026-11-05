@@ -12,12 +12,10 @@ const FORTUNES = [
   "First, solve the problem. Then, write the code.\n  — John Johnson",
 ];
 
-export const TOP_COMMANDS: SelectorItem[] = [
+const TOP_COMMANDS: SelectorItem[] = [
   { label: "/help", value: "/help", desc: "Show all commands" },
-  { label: "/skills", value: "/skills", desc: "Tech stack" },
   { label: "/social", value: "/social", desc: "Social links" },
   { label: "/contact", value: "/contact", desc: "Contact info" },
-  { label: "/projects", value: "/projects", desc: "List projects" },
   { label: "/links", value: "/links", desc: "Friend links" },
   { label: "/go", value: "/go ", desc: "Navigate to a page →" },
   { label: "/reload", value: "/reload", desc: "Reload the page" },
@@ -47,10 +45,8 @@ function buildHelpText(config: TerminalConfig): string {
   const routeNames = Object.keys(config.routes).join(" | ");
   return `Available slash commands:
   /help        - Show this help message
-  /skills      - Tech stack
   /social      - Social media links
   /contact     - Contact info (email)
-  /projects    - List projects
   /links       - Friend links
   /go <page>   - Navigate  (${routeNames || "..."})
   /reload      - Reload the page`;
@@ -62,17 +58,11 @@ export function resolveCommand(
   config: TerminalConfig,
 ): SlashCommandResult | null {
   const routes = config.routes;
-  const hostname = config.hostname;
+  const { user, host } = config;
 
   switch (slug) {
     case "help":
       return { kind: "text", text: buildHelpText(config) };
-
-    case "skills":
-      return {
-        kind: "text",
-        text: `Tech Stack:\n  ${config.skills.join("  |  ")}`,
-      };
 
     case "social":
       return {
@@ -99,16 +89,6 @@ export function resolveCommand(
             ? [{ label: "WeChat    ", url: `wechat:${config.contact.wechat}` }]
             : []),
         ],
-      };
-
-    case "projects":
-      return {
-        kind: "text",
-        text:
-          "Projects:\n" +
-          config.projects
-            .map((p, i) => `  ${String(i + 1).padStart(2, "0")}. ${p.title}  (${p.dates})`)
-            .join("\n"),
       };
 
     case "links":
@@ -143,7 +123,7 @@ export function resolveCommand(
       return { kind: "navigate", path: "__reload__" };
 
     case "ping": {
-      const target = rest.trim() || hostname.split("@")[1] || hostname;
+      const target = rest.trim() || host;
       return {
         kind: "stream",
         items: [
@@ -223,22 +203,19 @@ export function resolveCommand(
       return {
         kind: "text",
         text:
-          `Linux ${hostname.split("@")[1] ?? hostname} 6.6.0-website #1 SMP PREEMPT_DYNAMIC\n` +
-          `Next.js 16 / React 19 / TypeScript — running in your browser`,
+          `Linux ${host} 6.6.0-website #1 SMP PREEMPT_DYNAMIC\n` +
+          `React 19 / TypeScript on Cloudflare Workers — running in your browser`,
       };
 
     case "neofetch": {
-      const host = hostname.split("@");
-      const user = host[0] ?? "user";
-      const site = host[1] ?? hostname;
       return {
         kind: "text",
         text: [
-          `        ·:·         ${user}@${site}`,
+          `        ·:·         ${user}@${host}`,
           `      ·'   '·       ──────────────────────────`,
-          `    .'  ╔══╗  '.    OS:       Website OS (Next.js 16)`,
-          `   /   ╔╝  ╚╗   \\  Host:     Vercel Edge Network`,
-          `  |    ║    ║    |  Kernel:   React 19.0.0`,
+          `    .'  ╔══╗  '.    OS:       Website OS (Vite+ / Void)`,
+          `   /   ╔╝  ╚╗   \\  Host:     Cloudflare Workers`,
+          `  |    ║    ║    |  Kernel:   React 19`,
           `   \\   ╚╗  ╔╝   /  Shell:    zsh + terminal.tsx`,
           `    '.  ╚══╝  .'   DE:       TailwindCSS v4`,
           `      '·   ·'      WM:       Framer Motion`,
@@ -286,11 +263,11 @@ export function resolveCommand(
           kind: "stream",
           items: [
             {
-              text: `Hit:1 https://${hostname.split("@")[1] ?? hostname} stable InRelease`,
+              text: `Hit:1 https://${host} stable InRelease`,
               delay: 0,
             },
             {
-              text: `Get:2 https://${hostname.split("@")[1] ?? hostname} stable/main Packages [1,337 kB]`,
+              text: `Get:2 https://${host} stable/main Packages [1,337 kB]`,
               delay: 600,
             },
             { text: `Fetched 1,337 kB in 0s (∞ kB/s)`, delay: 1200 },
@@ -308,17 +285,17 @@ export function resolveCommand(
             { text: `Building dependency tree... Done`, delay: 400 },
             { text: `Calculating upgrade... Done`, delay: 800 },
             {
-              text: `The following packages will be upgraded:\n  nextjs  react  typescript  tailwindcss`,
+              text: `The following packages will be upgraded:\n  void  react  typescript  tailwindcss`,
               delay: 1200,
             },
             {
               text: `4 upgraded, 0 newly installed, 0 to remove.`,
               delay: 1800,
             },
-            { text: `Processing: nextjs (16.1.7) ...`, delay: 2400 },
-            { text: `Processing: react (19.1.0) ...`, delay: 2900 },
-            { text: `Processing: typescript (5.8.0) ...`, delay: 3400 },
-            { text: `Processing: tailwindcss (4.1.0) ...`, delay: 3900 },
+            { text: `Processing: void (1.4.0) ...`, delay: 2400 },
+            { text: `Processing: react (19.3.1) ...`, delay: 2900 },
+            { text: `Processing: typescript (7.0.2) ...`, delay: 3400 },
+            { text: `Processing: tailwindcss (4.3.3) ...`, delay: 3900 },
             {
               text: `Done. This website is now 10% more awesome.`,
               delay: 4600,
@@ -406,11 +383,11 @@ export function resolveCommand(
         kind: "stream",
         items: [
           {
-            text: `Broadcast message from root@${hostname.split("@")[1] ?? hostname}`,
+            text: `Broadcast message from root@${host}`,
             delay: 0,
           },
           { text: `The system will reboot NOW!`, delay: 600 },
-          { text: `[ OK ] Stopped Next.js app router.`, delay: 1200 },
+          { text: `[ OK ] Stopped TanStack Router.`, delay: 1200 },
           { text: `[ OK ] Stopped React renderer.`, delay: 1700 },
           { text: `[ OK ] Unmounting virtual filesystem...`, delay: 2200 },
           { text: `[ OK ] Reached target Power-Off.`, delay: 2800 },
@@ -509,13 +486,13 @@ export function resolveCommand(
       if (file === "readme.md" || file === "readme") {
         return {
           kind: "text",
-          text: `# ${hostname}\n\nA personal website built with Next.js, TypeScript,\nTailwindCSS, and a sprinkle of chaos.\n\nTry /help for available commands.`,
+          text: `# ${user}@${host}\n\nA personal website built with React, Void, TypeScript,\nTailwindCSS, and a sprinkle of chaos.\n\nTry /help for available commands.`,
         };
       }
       if (file === "package.json") {
         return {
           kind: "text",
-          text: `{\n  "name": "website",\n  "version": "0.1.0",\n  "scripts": {\n    "dev": "next dev --turbopack",\n    "build": "next build"\n  }\n}`,
+          text: `{\n  "name": "website",\n  "version": "0.1.0",\n  "scripts": {\n    "dev": "vp dev",\n    "build": "vp build"\n  }\n}`,
         };
       }
       if (!file) return { kind: "text", text: `cat: missing file operand` };
@@ -537,11 +514,10 @@ export function resolveCommand(
         return {
           kind: "text",
           text: [
-            `5067e91 fix: upgrade Tailwind to v4; update deps and lockfile`,
-            `891e13f feat: switch to pnpm and update mapbox patch`,
-            `6b9365c fix: resolve eslint errors and update dependencies`,
-            `f472d9f feat: add LeedsHack 2026 assets and data`,
-            `cd0dcd0 fix: bump next.js to 16.1.6 and refresh lockfile`,
+            `db07f30 docs: rewrite the README around a screenshot of the site`,
+            `9faadde feat(auth): identify the gateway owner by user id and support MCP clients`,
+            `b57030b feat(auth): host the you-find.me OAuth gateway`,
+            `3a7bf21 feat: deploy with Void on Cloudflare D1 and upgrade workspace dependencies`,
           ].join("\n"),
         };
       }
@@ -552,7 +528,7 @@ export function resolveCommand(
             { text: `remote: Enumerating objects: 5, done.`, delay: 0 },
             { text: `remote: Counting objects: 100% (5/5), done.`, delay: 500 },
             { text: `Unpacking objects: 100% (5/5), done.`, delay: 1000 },
-            { text: `From github.com:${hostname}`, delay: 1400 },
+            { text: `From github.com:${user}/${host}`, delay: 1400 },
             { text: `   5067e91..HEAD  main -> origin/main`, delay: 1700 },
             { text: `Already up to date.`, delay: 2100 },
           ],
@@ -568,7 +544,7 @@ export function resolveCommand(
               text: `Writing objects: 100% (3/3), 1.33 KiB | 1.33 MiB/s`,
               delay: 1000,
             },
-            { text: `To github.com:${hostname}.git`, delay: 1600 },
+            { text: `To github.com:${user}/${host}.git`, delay: 1600 },
             { text: `   5067e91..HEAD  main -> main`, delay: 1900 },
           ],
         };
@@ -585,7 +561,7 @@ export function resolveCommand(
     }
 
     case "curl": {
-      const url = (rest.trim() || (hostname.split("@")[1] ?? hostname)).replace(/^https?:\/\//, "");
+      const url = (rest.trim() || host).replace(/^https?:\/\//, "");
       return {
         kind: "stream",
         items: [
@@ -605,21 +581,17 @@ export function resolveCommand(
     }
 
     case "wget": {
-      const url = rest.trim() || `https://${hostname.split("@")[1] ?? hostname}`;
-      const host = url.replace(/^https?:\/\//, "").split("/")[0] ?? hostname;
-      const file =
-        url
-          .split("/")
-          .pop()
-          ?.replace(/[?#].*/, "") || "index.html";
+      const url = rest.trim() || `https://${host}`;
+      const urlHost = url.replace(/^https?:\/\//, "").replace(/\/.*/, "");
+      const file = url.replace(/[?#].*/, "").replace(/.*\//, "") || "index.html";
       const date = new Date().toISOString().replace("T", " ").slice(0, 19);
       return {
         kind: "stream",
         items: [
           { text: `--${date}--  ${url}`, delay: 0 },
-          { text: `Resolving ${host}... 76.76.21.21`, delay: 400 },
+          { text: `Resolving ${urlHost}... 76.76.21.21`, delay: 400 },
           {
-            text: `Connecting to ${host}|76.76.21.21|:443... connected.`,
+            text: `Connecting to ${urlHost}|76.76.21.21|:443... connected.`,
             delay: 900,
           },
           {
@@ -645,7 +617,7 @@ export function resolveCommand(
     case "fortune":
       return {
         kind: "text",
-        text: FORTUNES[Math.floor(Math.random() * FORTUNES.length)] ?? "Fortune unavailable.",
+        text: FORTUNES[Math.floor(Math.random() * FORTUNES.length)]!,
       };
 
     case "vim":

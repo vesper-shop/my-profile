@@ -15,7 +15,7 @@ keep unrelated refactors out of feature changes.
 
 Create a helper only when it:
 
-- isolates an external boundary such as Pi, an HTTP provider, auth, or PostgreSQL
+- isolates an external boundary such as an HTTP provider, auth, or D1
 - gives a real domain operation a useful name
 - removes repeated logic in multiple call sites
 - makes required cleanup or error translation consistent
@@ -27,7 +27,7 @@ Keep feature-owned logic close to its route or component.
 
 - A `try/catch` must perform explicit recovery, error translation, or resource cleanup.
 - Do not catch an error only to return `null`, an empty collection, or a false success state.
-- Do not add fallback secrets, bindings, permissions, identifiers, or model configuration.
+- Do not add fallback secrets, bindings, permissions, or identifiers.
 - Display fallbacks are acceptable when they are deliberate product behavior.
 - Streaming code must close or cancel resources on both success and failure.
 

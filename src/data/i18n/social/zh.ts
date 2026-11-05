@@ -1,6 +1,6 @@
-export const SOCIAL_MARKDOWN = String.raw`## 🌐 在网络上找到我
-
-这里集中说明我的 X（Twitter）的一些关注习惯以及免责声明
+export const SOCIAL = {
+  title: "🌐 在网络上找到我",
+  body: String.raw`这里集中说明我的 X（Twitter）的一些关注习惯以及免责声明
 
 ### 免责声明
 
@@ -55,4 +55,5 @@ export const SOCIAL_MARKDOWN = String.raw`## 🌐 在网络上找到我
 
 如果有要重要的事（比如开源事项、项目合作或明确的问题）推荐发送邮件至 [pleasure9876@qq.com](mailto:pleasure9876@qq.com) 并在第一条消息中说明来意。
 
-感谢你的关注，祝大家天天都开心 :-)`;
+感谢你的关注，祝大家天天都开心 :-)`,
+};

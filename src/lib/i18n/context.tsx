@@ -5,23 +5,13 @@ import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "./types";
 const STORAGE_KEY = "locale";
 
 function detectLocale(): Locale {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && SUPPORTED_LOCALES.includes(stored as Locale)) {
-      return stored as Locale;
-    }
-  } catch {
-    // localStorage unavailable (SSR / private mode)
-  }
+  const stored = localStorage.getItem(STORAGE_KEY);
+  const storedLocale = SUPPORTED_LOCALES.find((locale) => locale === stored);
+  if (storedLocale) return storedLocale;
 
-  try {
-    const browser = navigator.language.toLowerCase();
-    if (browser.startsWith("zh")) return "zh";
-    if (browser.startsWith("ja")) return "ja";
-  } catch {
-    // navigator unavailable
-  }
-
+  const browser = navigator.language.toLowerCase();
+  if (browser.startsWith("zh")) return "zh";
+  if (browser.startsWith("ja")) return "ja";
   return DEFAULT_LOCALE;
 }
 
@@ -37,11 +27,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // ignore
-    }
+    localStorage.setItem(STORAGE_KEY, next);
   }, []);
 
   return <LocaleContext.Provider value={{ locale, setLocale }}>{children}</LocaleContext.Provider>;

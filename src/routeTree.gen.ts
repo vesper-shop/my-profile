@@ -11,8 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
-import { Route as ChatRouteImport } from './routes/chat'
-import { Route as CvRouteImport } from './routes/cv'
 import { Route as SocialRouteImport } from './routes/social'
 import { Route as StoryRouteImport } from './routes/story'
 import { Route as AuthErrorRouteImport } from './routes/_auth/error'
@@ -26,16 +24,6 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChatRoute = ChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CvRoute = CvRouteImport.update({
-  id: '/cv',
-  path: '/cv',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SocialRoute = SocialRouteImport.update({
@@ -66,8 +54,6 @@ const AuthOauthConsentRoute = AuthOauthConsentRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/chat': typeof ChatRoute
-  '/cv': typeof CvRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
   '/error': typeof AuthErrorRoute
@@ -76,8 +62,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/chat': typeof ChatRoute
-  '/cv': typeof CvRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
   '/error': typeof AuthErrorRoute
@@ -88,8 +72,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/chat': typeof ChatRoute
-  '/cv': typeof CvRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
   '/_auth/error': typeof AuthErrorRoute
@@ -98,31 +80,13 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/chat'
-    | '/cv'
-    | '/social'
-    | '/story'
-    | '/error'
-    | '/login'
-    | '/oauth/consent'
+  fullPaths: '/' | '/social' | '/story' | '/error' | '/login' | '/oauth/consent'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/chat'
-    | '/cv'
-    | '/social'
-    | '/story'
-    | '/error'
-    | '/login'
-    | '/oauth/consent'
+  to: '/' | '/social' | '/story' | '/error' | '/login' | '/oauth/consent'
   id:
     | '__root__'
     | '/'
     | '/_auth'
-    | '/chat'
-    | '/cv'
     | '/social'
     | '/story'
     | '/_auth/error'
@@ -133,8 +97,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  ChatRoute: typeof ChatRoute
-  CvRoute: typeof CvRoute
   SocialRoute: typeof SocialRoute
   StoryRoute: typeof StoryRoute
 }
@@ -153,20 +115,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/chat': {
-      id: '/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof ChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cv': {
-      id: '/cv'
-      path: '/cv'
-      fullPath: '/cv'
-      preLoaderRoute: typeof CvRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/social': {
@@ -226,8 +174,6 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  ChatRoute: ChatRoute,
-  CvRoute: CvRoute,
   SocialRoute: SocialRoute,
   StoryRoute: StoryRoute,
 }

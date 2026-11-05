@@ -1,3 +1,4 @@
+import { FeatherIcon, HeartHandshakeIcon, SproutIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Dock, DockIcon } from "@/components/magicui/dock";
 import { ModeToggle } from "@/components/layout/mode-toggle";
@@ -5,8 +6,13 @@ import { LocaleToggle } from "@/components/layout/locale-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
+
+const NAV_ITEMS = [
+  { href: "/", icon: SproutIcon, label: "Home" },
+  { href: "/social", icon: HeartHandshakeIcon, label: "Social" },
+  { href: "/story", icon: FeatherIcon, label: "Story" },
+];
 
 export function Navbar() {
   return (
@@ -47,7 +53,7 @@ export function Navbar() {
             transform-gpu
           "
         >
-          {DATA.navbar.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <DockIcon key={item.href}>
               <Tooltip>
                 <TooltipTrigger asChild>

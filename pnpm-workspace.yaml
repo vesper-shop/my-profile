@@ -2,17 +2,11 @@ packages:
   - "."
   - "packages/*"
 overrides:
-  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
-  "@hono/node-server": "1.19.13"
-  mermaid: "11.15.0"
-  uuid: ">=14.0.0"
+  vite: npm:@voidzero-dev/vite-plus-core@1.5.0
   postcss: ">=8.5.10"
 allowBuilds:
-  "@google/genai": true
   better-sqlite3: true
   esbuild: true
-  protobufjs: true
   sharp: true
-  unrs-resolver: true
   workerd: true
 minimumReleaseAge: 1440

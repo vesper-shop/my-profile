@@ -1,9 +1,7 @@
 export interface TerminalConfig {
-  /** Shown in the title bar and prompt, e.g. "pleasure1234@website" */
-  hostname: string;
-
-  /** /skills output */
-  skills: string[];
+  /** Shown in the title bar and prompt as `user@host` */
+  user: string;
+  host: string;
 
   /** /social output */
   social: Array<{ name: string; url: string }>;
@@ -14,9 +12,6 @@ export interface TerminalConfig {
     telegram?: string;
     wechat?: string;
   };
-
-  /** /projects output */
-  projects: Array<{ title: string; dates: string }>;
 
   /** /links output */
   friends: Array<{ name: string; url: string }>;
@@ -29,8 +24,6 @@ export interface TerminalConfig {
     displayName: string;
     username: string;
     location?: string;
-    projectCount?: number;
-    hackathonCount?: number;
     university?: string;
     degree?: string;
     graduationYear?: string;

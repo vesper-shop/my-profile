@@ -1,92 +1,41 @@
 # Architecture
 
-This repository is a pnpm workspace with one deployable application and two local packages.
+This repository is a pnpm workspace with one deployable application and one local UI package.
 
 ## Repository Layout
 
-| Path               | Role                                                               |
-| ------------------ | ------------------------------------------------------------------ |
-| `src/`             | React SPA, TanStack Router pages, browser state, and app UI        |
-| `routes/`          | Void/Hono Worker route handlers                                    |
-| `server/`          | Worker-only domain and infrastructure code                         |
-| `types/`           | Contracts used by both browser and Worker code                     |
-| `packages/ui`      | Reusable UI, footer, and terminal                                  |
-| `packages/ai-core` | Platform-neutral Pi Agent construction and model adaptation        |
-| `docs/`            | Maintainer-facing architecture, deployment, design, and style docs |
+| Path          | Role                                                               |
+| ------------- | ------------------------------------------------------------------ |
+| `src/`        | React SPA, TanStack Router pages, browser state, and app UI        |
+| `routes/`     | Void/Hono Worker route handlers                                    |
+| `server/`     | Worker-only domain and infrastructure code                         |
+| `types/`      | Contracts used by both browser and Worker code                     |
+| `packages/ui` | Reusable UI, footer, and terminal                                  |
+| `docs/`       | Maintainer-facing architecture, deployment, design, and style docs |
 
 ## Runtime Shape
 
 ```text
-Browser (React chat state, current page only)
-  -> POST /api/chat/stream with the complete current transcript
-  -> typed NDJSON events
-  -> Void/Hono request bridge
-  -> @my-profile/ai-core
-  -> Pi Agent (sole loop owner)
-  -> pi-ai OpenAI-compatible stream adapter
-  -> provider configured by OPENAI_API_URL and OPENAI_MODEL
+Browser
+  -> Cloudflare static assets (SPA shell, pages, sitemap, LLM profile files)
+  -> /api/auth/*      Better Auth sign-in and the you-find.me OAuth provider (D1)
+  -> /api/presence    visitor presence count
+  -> /api/og/home     Open Graph image
 ```
 
-The app otherwise uses Cloudflare D1 for Better Auth and Cloudflare static assets
-for the React client. Production asset requests bypass Worker execution; only `/api/*` and Void's
-internal routes run Worker code before asset resolution.
+Production asset requests bypass Worker execution; only `/api/*` and Void's internal routes run
+Worker code before asset resolution.
 
-## Package Boundaries
+## Authentication Gateway
 
-### `packages/ai-core`
-
-`@my-profile/ai-core` pins `@earendil-works/pi-agent-core` and
-`@earendil-works/pi-ai` to the same exact version. It owns:
-
-- Pi `Agent` creation
-- OpenAI-compatible model descriptors
-- provider stream adaptation
-- request cancellation propagation
-- Pi runtime event subscription
-
-It does not import Void, Hono, Better Auth, React, Cloudflare bindings, or application prompts.
-It deliberately has no chat persistence, retry policy, thread IDs, snapshots, or application turn
-budgets.
-
-### Chat application layer
-
-The chat application boundary is split by runtime:
-
-- `types/chat.ts` owns the message/event contract and Zod transport validation because both the
-  browser and Worker consume it.
-- `server/lib/chat` owns the Vesper prompt, provider configuration, transcript conversion, and Pi
-  event bridge.
-- `routes/api/chat/stream.ts` owns authentication, request validation, NDJSON transport, abort
-  propagation, and stream cleanup.
-- `src/routes/chat.tsx` owns in-memory conversation state and rendering.
-
-One assistant UI message may contain multiple ordered steps around tool calls. The application gives
-Pi one sequential, read-only public profile lookup tool. Its Cloudflare assets binding stays in the
-Worker application layer; the shared protocol carries tool input/output events without giving the
-HTTP layer ownership of the agent loop.
-
-## Chat Request Lifecycle
-
-1. The browser appends a user message to its local transcript.
-2. It sends the complete transcript; refreshing or leaving the page discards it.
-3. The Worker validates the shared schema and converts the transcript to Pi messages.
-4. Pi Agent continues from the final user message, invokes read-only application tools when needed,
-   and owns all model turns.
-5. The bridge emits newline-delimited `assistant-step`, `text-delta`, tool, error, and finish events.
-6. Browser cancellation aborts the fetch, Pi Agent, and provider request.
-
-The Worker never stores the transcript.
-
-## Tests
-
-Vitest runs from an independent config so unit tests do not load Void or the Cloudflare Vite plugin.
-Tests cover the shared NDJSON contract, model construction, Pi cancellation and event forwarding,
-application event bridging, and the two read-only chat tools.
+`auth.ts` configures Better Auth as the identity provider for every Vesper app and site. The
+browser owns only the sign-in, consent, and error pages under `src/routes/_auth/`. `types/oauth.ts`
+holds the scope and owner contract shared by the consent page and the Worker.
 
 ## Generated Files
 
 - `.void/` is generated by Void.
 - `src/routeTree.gen.ts` is generated by TanStack Router.
-- `dist/` and `.wrangler/` are build artifacts.
+- `dist/`, `.cloudflare/`, and `.wrangler/` are build artifacts.
 
 Do not edit these files manually.

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 
 const PETAL_COLORS = ["#ffb7c5", "#ffc8d5", "#ff9ebc", "#ffdde6", "#f9a8c9"];
@@ -24,7 +22,7 @@ export function CherryBlossom() {
         id: i,
         left: Math.random() * 100,
         size: 8 + Math.random() * 10,
-        color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)] ?? "#ffb7c5",
+        color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)]!,
         fallDuration: 10 + Math.random() * 12,
         fallDelay: Math.random() * 15,
         swayDuration: 2.5 + Math.random() * 3,

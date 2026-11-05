@@ -1,33 +1,38 @@
-"use client";
-
 import { startTransition, useEffect, useState } from "react";
 import type { TerminalConfig } from "../core/config";
 import { MC_ARTS } from "../data/mc-arts";
 
+const BROWSER_VERSIONS: [name: string, pattern: RegExp][] = [
+  ["Edge", /Edg\/([\d.]+)/],
+  ["Opera", /OPR\/([\d.]+)/],
+  ["Chrome", /Chrome\/([\d.]+)/],
+  ["Firefox", /Firefox\/([\d.]+)/],
+  ["Safari", /Version\/([\d.]+).*Safari\//],
+];
+
+const WINDOWS_VERSIONS: Record<string, string> = {
+  "10.0": "Windows 10/11",
+  "6.3": "Windows 8.1",
+  "6.2": "Windows 8",
+  "6.1": "Windows 7",
+};
+
 function parseBrowser(ua: string): string {
-  if (/Edg\/[\d.]+/.test(ua)) return `Edge ${ua.match(/Edg\/([\d.]+)/)?.[1] ?? ""}`;
-  if (/OPR\/[\d.]+/.test(ua)) return `Opera ${ua.match(/OPR\/([\d.]+)/)?.[1] ?? ""}`;
-  if (/Chrome\/[\d.]+/.test(ua)) return `Chrome ${ua.match(/Chrome\/([\d.]+)/)?.[1] ?? ""}`;
-  if (/Firefox\/[\d.]+/.test(ua)) return `Firefox ${ua.match(/Firefox\/([\d.]+)/)?.[1] ?? ""}`;
-  if (/Safari\/[\d.]+/.test(ua)) return `Safari ${ua.match(/Version\/([\d.]+)/)?.[1] ?? ""}`;
+  for (const [name, pattern] of BROWSER_VERSIONS) {
+    const version = pattern.exec(ua)?.[1];
+    if (version) return `${name} ${version}`;
+  }
   return "Unknown";
 }
 
 function parsePlatform(ua: string): string {
   if (/iPhone|iPad|iPod/.test(ua)) return "iOS";
-  if (/Android/.test(ua)) return `Android ${ua.match(/Android ([\d.]+)/)?.[1] ?? ""}`;
-  if (/Windows NT/.test(ua)) {
-    const v = ua.match(/Windows NT ([\d.]+)/)?.[1];
-    const map: Record<string, string> = {
-      "10.0": "Windows 10/11",
-      "6.3": "Windows 8.1",
-      "6.2": "Windows 8",
-      "6.1": "Windows 7",
-    };
-    return map[v ?? ""] ?? `Windows NT ${v}`;
-  }
-  if (/Mac OS X/.test(ua))
-    return `macOS ${(ua.match(/Mac OS X ([\d_]+)/)?.[1] ?? "").replace(/_/g, ".")}`;
+  const android = /Android ([\d.]+)/.exec(ua)?.[1];
+  if (android) return `Android ${android}`;
+  const windows = /Windows NT ([\d.]+)/.exec(ua)?.[1];
+  if (windows) return WINDOWS_VERSIONS[windows] ?? `Windows NT ${windows}`;
+  const mac = /Mac OS X ([\d_]+)/.exec(ua)?.[1];
+  if (mac) return `macOS ${mac.replaceAll("_", ".")}`;
   if (/Linux/.test(ua)) return "Linux";
   return "Unknown";
 }
@@ -108,7 +113,7 @@ export function MOTD({ profile }: MOTDProps) {
       <p className="text-white">
         Welcome to{" "}
         <span className="text-green-400 font-bold">{profile.displayName}&apos;s Website</span>{" "}
-        (Next.js 16 / TypeScript)
+        (React / Cloudflare Workers)
       </p>
       <McArt />
 
@@ -160,8 +165,6 @@ export function MOTD({ profile }: MOTDProps) {
         <p className="text-zinc-400">
           {profile.location && `📍 ${profile.location}`}
           {profile.graduationYear && ` · 🎓 ${profile.graduationYear}`}
-          {profile.projectCount !== undefined && ` · 💼 ${profile.projectCount} projects`}
-          {profile.hackathonCount !== undefined && ` · 🏆 ${profile.hackathonCount} hackathons`}
         </p>
       </div>
 
@@ -194,7 +197,7 @@ export function MOTD({ profile }: MOTDProps) {
       <p className="mt-3 text-zinc-400">
         Type <span className="text-yellow-400">/help</span> to see available commands.
       </p>
-      {profile.founded?.[0] && (
+      {profile.founded.length > 0 && (
         <p className="mt-3 text-zinc-400">
           Recommend to visit <span className="text-yellow-400">/go social</span>.
         </p>

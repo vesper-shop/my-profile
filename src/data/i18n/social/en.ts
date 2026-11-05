@@ -1,6 +1,6 @@
-export const SOCIAL_MARKDOWN = String.raw`## 🌐 Find Me Online
-
-This page explains some of my habits around following people on X (Twitter), along with a disclaimer.
+export const SOCIAL = {
+  title: "🌐 Find Me Online",
+  body: String.raw`This page explains some of my habits around following people on X (Twitter), along with a disclaimer.
 
 ### Disclaimer
 
@@ -55,4 +55,5 @@ If you would like to stay in touch over the long term, you can add me on WeChat 
 
 If you have something important to discuss—such as an open-source matter, a project collaboration, or a specific question—I recommend emailing [pleasure9876@qq.com](mailto:pleasure9876@qq.com) and explaining why you are reaching out in your first message.
 
-Thank you for following me. I hope every day brings you something to smile about :-)`;
+Thank you for following me. I hope every day brings you something to smile about :-)`,
+};

@@ -21,8 +21,6 @@ export const home = {
     p1: "不足之处 敬请谅解 🙏",
     p2: "就读于{university}的计算机科学学生，在{fullstack}开发和{ai}技术方面有实践经验。活跃于开源项目贡献者，主要为{CherryStudio}贡献代码。使用 React、Next.js 和 TypeScript 构建项目。",
     p3: "离开键盘后，我喜欢骑公路车、沉浸在音乐里、或者沉迷于开放世界游戏。我是{hackathon}爱好者，曾参加🇬🇧多所大学的黑客松——希望有一天能成为数字游民，走到哪开源到哪。",
-    p4: "目前我正在寻找工作机会。点击{here}来更好地了解我 :3",
-    here: "这里",
   },
 
   friends: {

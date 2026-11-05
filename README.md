@@ -11,8 +11,8 @@
 
 ## Features
 
-- **Home, Story and CV** — who I am and what I build, in three languages
-- **Chat and Terminal** — a Pi Agent chat and a slash-command terminal
+- **Home and Story** — who I am and what I build, in three languages
+- **Terminal** — a slash-command terminal
 - **Gateway** — the OAuth issuer behind every Vesper app and site
 
 ## Develop

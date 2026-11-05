@@ -1,5 +1,4 @@
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 import { ImagesBadge } from "@/components/aceternityui/images-badge";
 import { Tooltip } from "@/components/aceternityui/tooltip-card";
@@ -9,7 +8,7 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { DiaTextReveal } from "@/components/magicui/dia-text-reveal";
 import { Highlighter } from "@/components/magicui/highlighter";
 import { FRIENDS } from "@/data/links";
-import { DATA } from "@/data/resume";
+import { PROFILE } from "@/data/profile";
 import { useLocale, T } from "@/lib/i18n";
 import * as homeStrings from "@/data/i18n/home";
 
@@ -98,17 +97,6 @@ function HomePage() {
       hackathon
     </span>
   );
-  const hereLink = (
-    <Highlighter action="underline">
-      <Link
-        to="/cv"
-        className="inline-flex items-center gap-0.5 text-foreground hover:text-muted-foreground transition-colors"
-      >
-        {t.about.here}
-        <ArrowUpRight className="w-3 h-3" />
-      </Link>
-    </Highlighter>
-  );
   const githubLink = (
     <a
       href="https://github.com/Pleasurecruise/my-profile/pulls"
@@ -138,15 +126,15 @@ function HomePage() {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <img
-                  src={DATA.avatarUrl}
-                  alt={DATA.name}
+                  src={PROFILE.avatarUrl}
+                  alt={PROFILE.name}
                   width={56}
                   height={56}
                   className="rounded-full transition-transform duration-700 ease-in-out hover:rotate-[360deg]"
                 />
                 <div className="flex flex-col">
                   <a
-                    href={DATA.contact.social.GitHub.url}
+                    href={PROFILE.contact.social.GitHub.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[20px] font-medium text-foreground"
@@ -181,9 +169,6 @@ function HomePage() {
             </p>
             <p className="text-[15px] leading-relaxed text-foreground">
               <T text={t.about.p3} vars={{ hackathon: italicHackathon }} />
-            </p>
-            <p className="text-[15px] leading-relaxed text-foreground">
-              <T text={t.about.p4} vars={{ here: hereLink }} />
             </p>
           </div>
         </BlurFade>
@@ -235,7 +220,7 @@ function HomePage() {
                 <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                   <li>
                     <a
-                      href={`mailto:${DATA.contact.email}`}
+                      href={`mailto:${PROFILE.contact.email}`}
                       className="flex items-center gap-2.5 text-[14px] text-muted-foreground hover:text-foreground transition-colors group py-0.5"
                     >
                       <Icons.email className="size-4 shrink-0" />
@@ -271,7 +256,7 @@ function HomePage() {
                   </li>
                   <li>
                     <a
-                      href={DATA.contact.social.Instagram.url}
+                      href={PROFILE.contact.social.Instagram.url}
                       className="flex items-center gap-2.5 text-[14px] text-muted-foreground hover:text-foreground transition-colors group py-0.5"
                     >
                       <Icons.instagram className="size-4 shrink-0" />
@@ -294,7 +279,7 @@ function HomePage() {
                       </a>
                     </Tooltip>
                   </li>
-                  {Object.entries(DATA.contact.social)
+                  {Object.entries(PROFILE.contact.social)
                     .filter(([, social]) => social.navbar)
                     .map(([name, social]) => (
                       <li key={name}>

@@ -14,10 +14,7 @@ const BLUR_FADE_DELAY = 0.04;
 
 function SocialPage() {
   const { locale } = useLocale();
-  const markdown = socialContent[locale];
-  const headingMatch = markdown.match(/^##\s+(.+?)\n/);
-  const headingText = headingMatch?.[1] ?? "";
-  const body = headingMatch ? markdown.slice(headingMatch[0].length).replace(/^\n+/, "") : markdown;
+  const social = socialContent[locale];
 
   return (
     <main className="flex min-h-dvh flex-col">
@@ -28,10 +25,10 @@ function SocialPage() {
               delay={BLUR_FADE_DELAY * 1000 + 200}
               duration={50}
               className="mb-6 text-2xl font-bold tracking-tight"
-              text={headingText}
+              text={social.title}
             />
             <article className="article story-article">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{body}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{social.body}</ReactMarkdown>
             </article>
           </div>
         </BlurFade>

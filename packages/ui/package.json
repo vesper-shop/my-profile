@@ -4,9 +4,6 @@
   "private": true,
   "exports": {
     ".": "./src/index.ts",
-    "./cherry-blossom": "./src/components/cherry-blossom.tsx",
-    "./hello-signature": "./src/components/hello-signature.tsx",
-    "./terminal": "./src/terminal/index.ts",
-    "./footer": "./src/footer/index.ts"
+    "./terminal": "./src/terminal/index.ts"
   }
 }

@@ -1,19 +1,12 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 const LAUNCH_DATE = new Date("2025-09-04");
+const DAY_MS = 1000 * 60 * 60 * 24;
 
 export function SiteAge() {
-  const [days, setDays] = useState<number | null>(null);
-
-  useEffect(() => {
-    setDays(Math.floor((Date.now() - LAUNCH_DATE.getTime()) / (1000 * 60 * 60 * 24)));
-  }, []);
+  const days = Math.floor((Date.now() - LAUNCH_DATE.getTime()) / DAY_MS);
 
   return (
     <p className="text-xs text-muted-foreground/50">
-      The site has been live for <span className="tabular-nums">{days ?? "—"}</span> days!
+      The site has been live for <span className="tabular-nums">{days}</span> days!
     </p>
   );
 }

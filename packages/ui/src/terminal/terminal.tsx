@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { TerminalConfig } from "./core/config";
 import { getSelectorItems, resolveCommand } from "./core/commands";
@@ -13,7 +11,7 @@ interface TerminalProps {
 }
 
 export function Terminal({ config, onClose, onDragStart }: TerminalProps) {
-  const hostname = config.hostname;
+  const hostname = `${config.user}@${config.host}`;
   const PROMPT = `${hostname}:~$`;
 
   const idRef = useRef(0);
@@ -247,7 +245,7 @@ export function Terminal({ config, onClose, onDragStart }: TerminalProps) {
         if (historyIdx === -1) draftRef.current = input;
         const next = Math.min(historyIdx + 1, history.length - 1);
         setHistoryIdx(next);
-        const val = history[next] ?? "";
+        const val = history[next]!;
         setInput(val);
         setSelectorItems([]);
         requestAnimationFrame(() => {
@@ -259,7 +257,7 @@ export function Terminal({ config, onClose, onDragStart }: TerminalProps) {
         if (historyIdx === -1) return;
         const next = historyIdx - 1;
         setHistoryIdx(next);
-        const val = next === -1 ? draftRef.current : (history[next] ?? "");
+        const val = next === -1 ? draftRef.current : history[next]!;
         setInput(val);
         setSelectorItems([]);
         requestAnimationFrame(() => {

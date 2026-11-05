@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useId, useRef, useState } from "react";
 
 const font = { className: "", style: { fontFamily: "'Dancing Script', cursive" } };
@@ -15,8 +13,8 @@ export function HelloSignature() {
     const el = svgRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
           setStarted(true);
           observer.disconnect();
         }
