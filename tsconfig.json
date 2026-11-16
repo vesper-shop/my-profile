@@ -16,9 +16,7 @@
     "types": ["void/env", "node"],
     "paths": {
       "@/*": ["./src/*"],
-      "@shared/*": ["./types/*"],
       "@server/*": ["./server/*"],
-      "void/db": ["./.void/db.d.ts"],
       "void/routes": ["./.void/routes.d.ts"]
     }
   },

@@ -18,19 +18,12 @@ This repository is a pnpm workspace with one deployable application and one loca
 ```text
 Browser
   -> Cloudflare static assets (SPA shell, pages, sitemap, LLM profile files)
-  -> /api/auth/*      Better Auth sign-in and the you-find.me OAuth provider (D1)
   -> /api/presence    visitor presence count
   -> /api/og/home     Open Graph image
 ```
 
 Production asset requests bypass Worker execution; only `/api/*` and Void's internal routes run
 Worker code before asset resolution.
-
-## Authentication Gateway
-
-`auth.ts` configures Better Auth as the identity provider for every Vesper app and site. The
-browser owns only the sign-in, consent, and error pages under `src/routes/_auth/`. `types/oauth.ts`
-holds the scope and owner contract shared by the consent page and the Worker.
 
 ## Generated Files
 

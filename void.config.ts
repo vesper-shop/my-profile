@@ -2,14 +2,8 @@ import { defineConfig } from "void/config";
 
 export default defineConfig({
   target: "cloudflare",
-  auth: { providers: ["github", "google"] },
   routing: {
     notFound: "404-page",
-    rewrites: {
-      "/.well-known/oauth-authorization-server/api/auth":
-        "/api/auth/.well-known/oauth-authorization-server",
-      "/.well-known/openid-configuration/api/auth": "/api/auth/.well-known/openid-configuration",
-    },
   },
   inference: {
     appType: "void",
@@ -31,13 +25,6 @@ export default defineConfig({
     placement: {
       mode: "smart",
     },
-    d1_databases: [
-      {
-        binding: "DB",
-        database_name: "my-profile",
-        migrations_dir: "./db/migrations",
-      },
-    ],
     observability: {
       logs: {
         enabled: true,

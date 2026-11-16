@@ -10,20 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as SocialRouteImport } from './routes/social'
 import { Route as StoryRouteImport } from './routes/story'
-import { Route as AuthErrorRouteImport } from './routes/_auth/error'
-import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AuthOauthConsentRouteImport } from './routes/_auth/oauth/consent'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SocialRoute = SocialRouteImport.update({
@@ -36,67 +28,33 @@ const StoryRoute = StoryRouteImport.update({
   path: '/story',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthErrorRoute = AuthErrorRouteImport.update({
-  id: '/error',
-  path: '/error',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthOauthConsentRoute = AuthOauthConsentRouteImport.update({
-  id: '/oauth/consent',
-  path: '/oauth/consent',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
-  '/error': typeof AuthErrorRoute
-  '/login': typeof AuthLoginRoute
-  '/oauth/consent': typeof AuthOauthConsentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
-  '/error': typeof AuthErrorRoute
-  '/login': typeof AuthLoginRoute
-  '/oauth/consent': typeof AuthOauthConsentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_auth': typeof AuthRouteRouteWithChildren
   '/social': typeof SocialRoute
   '/story': typeof StoryRoute
-  '/_auth/error': typeof AuthErrorRoute
-  '/_auth/login': typeof AuthLoginRoute
-  '/_auth/oauth/consent': typeof AuthOauthConsentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/social' | '/story' | '/error' | '/login' | '/oauth/consent'
+  fullPaths: '/' | '/social' | '/story'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/social' | '/story' | '/error' | '/login' | '/oauth/consent'
-  id:
-    | '__root__'
-    | '/'
-    | '/_auth'
-    | '/social'
-    | '/story'
-    | '/_auth/error'
-    | '/_auth/login'
-    | '/_auth/oauth/consent'
+  to: '/' | '/social' | '/story'
+  id: '__root__' | '/' | '/social' | '/story'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   SocialRoute: typeof SocialRoute
   StoryRoute: typeof StoryRoute
 }
@@ -108,13 +66,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/social': {
@@ -131,49 +82,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/error': {
-      id: '/_auth/error'
-      path: '/error'
-      fullPath: '/error'
-      preLoaderRoute: typeof AuthErrorRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/login': {
-      id: '/_auth/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/oauth/consent': {
-      id: '/_auth/oauth/consent'
-      path: '/oauth/consent'
-      fullPath: '/oauth/consent'
-      preLoaderRoute: typeof AuthOauthConsentRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
   }
 }
 
-interface AuthRouteRouteChildren {
-  AuthErrorRoute: typeof AuthErrorRoute
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthOauthConsentRoute: typeof AuthOauthConsentRoute
-}
-
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthErrorRoute: AuthErrorRoute,
-  AuthLoginRoute: AuthLoginRoute,
-  AuthOauthConsentRoute: AuthOauthConsentRoute,
-}
-
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRouteRoute: AuthRouteRouteWithChildren,
   SocialRoute: SocialRoute,
   StoryRoute: StoryRoute,
 }

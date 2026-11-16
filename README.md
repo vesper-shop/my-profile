@@ -13,7 +13,6 @@
 
 - **Home and Story** — who I am and what I build, in three languages
 - **Terminal** — a slash-command terminal
-- **Gateway** — the OAuth issuer behind every Vesper app and site
 
 ## Develop
 
@@ -22,7 +21,7 @@ pnpm install
 pnpm dev
 ```
 
-React and Hono on Cloudflare Workers with Void and Better Auth ·
+React and Hono on Cloudflare Workers with Void ·
 [Architecture](docs/ARCHITECTURE.md) · [Deployment](docs/DEPLOYMENT.md)
 
 AGPL-3.0, with code derived from [Taki](https://github.com/canmi21/taki) · Part of [Vesper](https://github.com/vesper-shop)

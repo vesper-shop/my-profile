@@ -9,7 +9,6 @@ The project is a pnpm workspace containing:
 - a React 19 SPA built with Vite+
 - TanStack Router file-based client routes
 - Void file-based Hono routes running on Cloudflare Workers
-- Better Auth backed by Cloudflare D1
 - Cloudflare static assets
 - the `@my-profile/ui` package
 
@@ -21,7 +20,6 @@ The project is a pnpm workspace containing:
 | Void + Hono             | Worker routing, auth, environment, and Cloudflare packaging |
 | React + TanStack Router | Browser SPA and file-based routes                           |
 | Tailwind CSS            | CSS-first styling with the existing project design tokens   |
-| Better Auth + D1        | Authentication and persistence in Cloudflare D1             |
 | Cloudflare Assets       | Static client files                                         |
 
 Exact versions are recorded in `package.json` and each workspace package manifest.
